@@ -1,0 +1,319 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Как ИИ-сервисы используют ваши данные</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column of policy dossiers, wide comparison table on its own scroll track */
+:root{
+  --bg:#f7f8f6; --surface:#ffffff; --fg:#1d2320; --muted:#5d6762; --line:#d9dfdb;
+  --accent:#2b4c6f;
+  --use-bg:#fdeec8; --use-fg:#6b4a00;
+  --no-bg:#d6f2dc; --no-fg:#155a2a;
+  --gap-bg:#eceff1; --gap-fg:#3e4a52;
+  --display:"PT Serif", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141917; --surface:#1b211f; --fg:#e6ebe8; --muted:#9aa5a0; --line:#2e3733;
+  --accent:#8fb4dc;
+  --use-bg:#4a3a12; --use-fg:#fbe2a0;
+  --no-bg:#173d24; --no-fg:#a8ecbb;
+  --gap-bg:#252d33; --gap-fg:#c4ced5;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141917; --surface:#1b211f; --fg:#e6ebe8; --muted:#9aa5a0; --line:#2e3733;
+  --accent:#8fb4dc;
+  --use-bg:#4a3a12; --use-fg:#fbe2a0;
+  --no-bg:#173d24; --no-fg:#a8ecbb;
+  --gap-bg:#252d33; --gap-fg:#c4ced5;
+  color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:20px;padding-block:40px 64px;display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2.2rem}
+h2{font-size:1.55rem}
+h3{font-size:1.15rem;font-family:var(--body);font-weight:600}
+p{margin:0}
+.prose{max-width:68ch;display:flex;flex-direction:column;gap:12px}
+.meta{font-family:var(--mono);font-size:.8rem;color:var(--muted);letter-spacing:.02em}
+a{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+mark{padding:1px 4px;border-radius:3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+mark.use{background:var(--use-bg);color:var(--use-fg)}
+mark.no{background:var(--no-bg);color:var(--no-fg);font-weight:500}
+.legend{display:flex;flex-wrap:wrap;gap:10px 20px;font-size:.92rem}
+.legend span{display:flex;align-items:center;gap:8px}
+.sw{width:14px;height:14px;border-radius:3px;display:inline-block}
+.sw.use{background:var(--use-bg);border:1px solid var(--use-fg)}
+.sw.no{background:var(--no-bg);border:1px solid var(--no-fg)}
+.sw.gap{background:var(--gap-bg);border:1px solid var(--gap-fg)}
+.note{border-left:3px solid var(--accent);padding:10px 16px;background:var(--surface);font-size:.95rem;max-width:80ch;display:flex;flex-direction:column;gap:8px}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;min-width:1400px;width:100%;font-size:.86rem;line-height:1.45}
+th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:10px 12px;vertical-align:top;text-align:left}
+th:last-child,td:last-child{border-right:0}
+tr:last-child td{border-bottom:0}
+thead th{font-family:var(--display);font-size:1rem;background:var(--surface)}
+thead th.ru{border-top:3px solid var(--accent)}
+tbody th{font-weight:600;width:140px;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;position:sticky;left:0;background:var(--surface)}
+td.no{background:var(--no-bg);color:var(--no-fg)}
+td.use{background:var(--use-bg);color:var(--use-fg)}
+td.gap{background:var(--gap-bg);color:var(--gap-fg)}
+tr.api th, tr.api td{border-top:3px solid var(--accent)}
+tr.docs td{background:var(--bg)}
+.doclist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.doclist a{overflow-wrap:anywhere}
+td mark{display:inline}
+.dossiers{display:flex;flex-direction:column;gap:32px}
+.dossier{display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:1px solid var(--line)}
+.dossier header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.dossier ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;max-width:80ch}
+.links{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem}
+.src{list-style:none;padding:0;margin:0;display:grid;gap:6px;font-size:.92rem}
+.src li{display:flex;flex-wrap:wrap;gap:4px 10px}
+.src b{min-width:110px}
+code{font-family:var(--mono);font-size:.85em}
+</style>
+
+<div class="wrap">
+
+<header class="prose">
+  <p class="meta">Сверено с первоисточниками 13 октября 2026 · <a href="https://claude.ai/artifact/XgWtvicZG8eTsduvsdvA1m" target="_blank" rel="noopener">English version</a></p>
+  <h1>Как ИИ-сервисы используют ваши данные</h1>
+  <p>Сравнение потребительских политик и условий Anthropic (Claude), OpenAI (ChatGPT), Google (Gemini), DeepSeek, Qwen, Яндекса (Алиса AI) и Сбера (GigaChat). Каждое утверждение ниже взято из текущей редакции официального документа компании, ссылка на который указана в карточке. Сторонние обзоры и пересказы не использовались.</p>
+  <div class="legend" aria-label="Легенда">
+    <span><i class="sw use"></i>Где и как данные используются</span>
+    <span><i class="sw no"></i>Где компания заявляет, что данные НЕ используются</span>
+    <span><i class="sw gap"></i>В документе прямо не указано</span>
+  </div>
+</header>
+
+<div class="note">
+  <p>Речь только о потребительских сервисах (чат-боты и приложения). Корпоративные тарифы и API регулируются отдельными договорами или документами. Тексты переведены и пересказаны близко к оригиналу.</p>
+  <p>Для Яндекса разобраны условия «Алиса AI» и общая Политика конфиденциальности Яндекса (26.08.2025). Для Сбера — пользовательское соглашение GigaChat и политика конфиденциальности портала developers.sber.ru (10.02.2025), через который подключается GigaChat API. Политика обработки персональных данных ПАО Сбербанк (утв. 10.09.2025), на которую ссылается соглашение GigaChat, разобрана по копии страницы, которую прислал пользователь.</p>
+</div>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+  <h2>Сравнительная таблица</h2>
+  <p class="meta">Таблица прокручивается вбок. Российские сервисы — два правых столбца.</p>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th></th><th>Anthropic (Claude)</th><th>OpenAI (ChatGPT)</th><th>Google (Gemini)</th><th>DeepSeek</th><th>Qwen</th><th class="ru">Яндекс (Алиса AI)</th><th class="ru">Сбер (GigaChat)</th></tr></thead>
+    <tbody>
+      <tr class="docs"><th>Документы, использованные для анализа</th>
+        <td><ul class="doclist">
+          <li><a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="https://privacy.claude.com/en/articles/12109829-how-do-i-change-my-model-improvement-privacy-settings" target="_blank" rel="noopener">Privacy Center: настройка обучения</a></li>
+          <li><a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">Commercial Terms (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://openai.com/policies/row-privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="https://openai.com/enterprise-privacy/" target="_blank" rel="noopener">Enterprise privacy (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://support.google.com/gemini/answer/13594961" target="_blank" rel="noopener">Gemini Apps Privacy Hub</a></li>
+          <li><a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">Gemini API Additional Terms</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html" target="_blank" rel="noopener">Open Platform Terms (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://qwen.ai/privacypolicy" target="_blank" rel="noopener">Qwen Privacy Policy</a></li>
+          <li><a href="https://www.alibabacloud.com/help/en/model-studio/privacy-notice" target="_blank" rel="noopener">Model Studio privacy notice (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://yandex.ru/legal/alice_chat/ru/" target="_blank" rel="noopener">Условия «Алиса AI»</a></li>
+          <li><a href="https://www.yandex.ru/legal/aliceapp/ru/" target="_blank" rel="noopener">Лицензия приложения «Алиса AI»</a></li>
+          <li><a href="https://yandex.ru/legal/confidential/" target="_blank" rel="noopener">Политика конфиденциальности Яндекса</a></li>
+          <li><a href="https://aistudio.yandex.ru/docs/ru/ai-studio/operations/disable-logging.html" target="_blank" rel="noopener">AI Studio: отключение логирования (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://developers.sber.ru/docs/ru/policies/gigachat/agreement" target="_blank" rel="noopener">Пользовательское соглашение GigaChat</a></li>
+          <li><a href="https://www.sberbank.ru/privacy/policy#pdn" target="_blank" rel="noopener">Политика обработки ПД ПАО Сбербанк</a></li>
+          <li><a href="https://developers.sber.ru/docs/ru/policies/privacy-policy" target="_blank" rel="noopener">Политика портала developers.sber.ru</a></li>
+          <li><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/individuals" target="_blank" rel="noopener">Оферта API для физлиц</a></li>
+          <li><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/corporate-clients-prepaid" target="_blank" rel="noopener">Оферта API для юрлиц</a></li>
+        </ul></td></tr>
+      <tr><th>Редакция</th>
+        <td>Действует с 10.09.2026</td><td>Обновлена 06.02.2026</td><td>Уведомление 29.06.2026, Privacy Hub 24.09.2026</td><td>Обновлена 10.02.2026</td><td>Действует с 07.09.2026</td><td>Условия «Алиса AI» от 10.09.2026; лицензия приложения от 10.04.2026</td><td>Пользовательское соглашение GigaChat, обновлено 22.06.2026</td></tr>
+      <tr><th>Оператор / юрисдикция</th>
+        <td>Anthropic PBC (США); для ЕЭЗ, Великобритании, Швейцарии — Anthropic Ireland</td><td>OpenAI OpCo (США); для ЕЭЗ и Швейцарии — OpenAI Ireland</td><td>Google LLC; для ЕЭЗ и Швейцарии — Google Ireland</td><td>Hangzhou DeepSeek Artificial Intelligence Co. (Китай)</td><td>NTH Power Global Tech Singapore (Сингапур), модели — Alibaba Cloud Singapore</td><td>ООО «Платформа ИИ-решений» (Москва); применяется право РФ</td><td>ПАО Сбербанк; применяется право РФ</td></tr>
+      <tr><th>Где хранятся данные</th>
+        <td>Серверы в США и других странах</td><td>США и страны партнёров и подрядчиков</td><td>По общей политике Google</td><td class="use">Китайская Народная Республика</td><td>Сингапур</td><td>Для граждан РФ запись, накопление и хранение ведутся в базах данных на территории России (Политика, п. 7.3); для других стран возможна передача в Россию</td><td>В памяти ЭВМ Банка и его аффилированных лиц и на серверах, назначенных Банком (соглашение, п. 5.2.1). Общая политика: данные граждан РФ хранятся в базах на территории России, кроме случаев, предусмотренных законом (п. 9.1)</td></tr>
+      <tr><th>Обучение моделей на ваших чатах</th>
+        <td class="use">Да, по умолчанию, если не отключить в настройках</td><td class="use">Да, по умолчанию, если не отключить в настройках</td><td class="use">Да, пока включена настройка Keep Activity (по умолчанию включена)</td><td class="use">Да: в том числе силами компаний группы для обучения базовых моделей</td><td class="use">Да, но только обезличенный контент и отзывы</td><td class="use">Да, по умолчанию: запросы, файлы и полученные данные используются для улучшения сервисов Яндекса и аффилированных лиц (п. 6.6) и совершенствования алгоритмов и технологий (п. 4.3). Слово «обучение» в тексте не используется</td><td class="gap">Об обучении или улучшении моделей прямо не сказано. При этом Банк получает лицензию на ваши запросы «любыми способами» без ограничения территории (п. 5.3). <mark class="use">Общая политика (цель 7): данные клиентов, включая транзакции, доходы, расходы, профиль в соцсетях и обращения, обрабатываются для развития и разработки продуктов</mark>; ИИ в политике не упоминается</td></tr>
+      <tr><th>Можно ли отказаться</th>
+        <td>Да, переключатель в настройках конфиденциальности</td><td>Да, в Data Controls или на privacy.openai.com</td><td>Да, выключить Keep Activity</td><td>Право на отказ указано; способ — запрос на privacy@deepseek.com</td><td class="gap">Отдельный механизм отказа от обучения в политике не описан</td><td>Да, в настройках Яндекс ID: id.yandex.ru/personal/data-access (п. 6.6)</td><td class="gap">В соглашении механизм отказа не описан; при несогласии нужно прекратить пользоваться сервисом (п. 2.3). Общая политика: можно потребовать прекратить обработку и отозвать согласие (п. 9.3); отдельного отказа от использования запросов нет</td></tr>
+      <tr><th>Что используется даже после отказа</th>
+        <td class="use">Чаты, помеченные системой безопасности, и материалы, отправленные через отзыв (👍/👎)</td><td class="gap">Исключения для обучения после отказа в политике не перечислены</td><td class="use">Чаты хранятся 72 ч; используются для безопасности с участием людей-ревьюеров; отзывы идут в обучение; настройка не распространяется на создание анонимизированных данных</td><td class="gap">Не указано</td><td class="gap">Не применимо (отказ не описан)</td><td class="use">Отказ описан только для п. 6.6. Ответы сервиса могут использоваться Яндексом анонимно «в любых целях» бессрочно (п. 3.4); лицензия на запросы безотзывная (п. 4.3)</td><td class="gap">Не применимо (отказ не описан)</td></tr>
+      <tr><th>Чтение чатов людьми</th>
+        <td>Проверка помеченного контента на нарушения</td><td>Мониторинг контента для предотвращения злоупотреблений</td><td class="use">Да: часть чатов читают ревьюеры, в том числе подрядчики; такие чаты хранятся до 3 лет и не удаляются вместе с историей</td><td class="gap">Не указано</td><td class="no">Не проверяет вручную, кроме случаев безопасности, злоупотреблений, отладки и требований закона</td><td class="use">Обезличенные голосовые записи могут получать сотрудники Яндекса и подрядчики (лицензия приложения, п. 5.8). Для текстовых запросов Яндекс пишет, что не обязан и не имеет технической возможности модерировать контент (п. 5.4). Общая политика: в большинстве случаев данные обрабатываются автоматически, сотрудники получают доступ только при необходимости (разд. 6)</td><td class="gap">Не указано</td></tr>
+      <tr><th>Режим «без следа»</th>
+        <td class="gap">В политике не описан</td><td class="no">Временный чат: не попадает в историю и не используется для обучения; удаляется в течение 30 дней</td><td class="no">Временный чат: не используется для обучения моделей Google</td><td class="gap">Не описан</td><td class="gap">Не описан</td><td class="gap">Не описан</td><td class="gap">Не описан</td></tr>
+      <tr><th>Срок хранения</th>
+        <td>Удалённый чат стирается из бэкенда в течение 30 дней</td><td>Удалённое стирается в течение 30 дней, кроме уже обезличенного для обучения</td><td>По умолчанию автоудаление через 18 месяцев (можно 3, 36 или бессрочно)</td><td>Пока существует аккаунт; при нарушениях дольше</td><td>«Сколько необходимо»; в Индонезии отдельные данные до 5 лет</td><td>Сколько необходимо для цели или по закону; данные можно удалить в разделе «Управление данными» Яндекс ID (Политика, разд. 8). Согласие на трансграничную обработку действует 10 лет после прекращения использования (условия, п. 6.2)</td><td class="gap">Срок хранения запросов не указан. Общая политика: не дольше, чем требуют цели, если закон не требует иного (п. 4.3); уничтожение при достижении цели, отзыве согласия или требовании прекратить обработку (п. 4.4). Политика портала developers.sber.ru: данные уничтожаются в течение 30 дней после достижения цели, при невозможности — блокируются и уничтожаются в течение 6 месяцев (пп. 7.1, 7.3)</td></tr>
+      <tr><th>Реклама и публикация</th>
+        <td class="no">Не продаёт данные; от передачи для таргетированной рекламы своих продуктов можно отказаться</td><td class="no">Не продаёт, не передаёт для поведенческой рекламы и не обрабатывает для таргетированной рекламы (раздел для штатов США)</td><td class="no">Чаты Gemini не используются для показа рекламы; Google не продаёт личную информацию</td><td class="no">Не занимается таргетированной рекламой и не продаёт данные</td><td class="use">Передаёт часть данных об устройстве рекламным и аналитическим партнёрам; получает данные от них</td><td class="use">Запросы и загруженные файлы могут размещаться в сервисах Яндекса для доступа неопределённого круга лиц, в том числе с привязкой к имени пользователя, с правом сублицензии (п. 4.3). Общая политика: реклама персонализируется по истории поиска и другим данным (разд. 5); данные могут передаваться рекламодателям и рекламным сетям (п. 7.2). Отключить персонализацию: yandex.ru/tune/adv</td><td class="use">Сгенерированный контент может использоваться в рекламе и маркетинге Банка, публично показываться и сублицензироваться третьим лицам (п. 5.2). Общая политика (цели 5 и 6): персонализированные предложения на основе интересов, в том числе выявленных автоматизированными системами Банка; единый профиль клиента; рекламные звонки, SMS, push и e-mail, в том числе о продуктах партнёров и третьих лиц. Политика портала developers.sber.ru: рекламно-информационные рассылки (п. 3.1)</td></tr>
+      <tr><th>Продажа данных</th>
+        <td class="no">Не продаёт</td><td class="no">Не продаёт</td><td class="no">Не продаёт</td><td class="no">Не продаёт</td><td class="gap">Прямого заявления нет</td><td class="gap">Прямого заявления нет ни в условиях, ни в Политике конфиденциальности</td><td class="gap">Прямого заявления нет ни в соглашении, ни в общей политике Сбербанка, ни в политике портала developers.sber.ru</td></tr>
+      <tr><th>Передача властям</th>
+        <td>По закону, судебному процессу или обязательному запросу государства</td><td>По закону и для защиты прав, безопасности, предотвращения мошенничества</td><td>По закону и обязательным запросам государственных органов</td><td class="use">Правоохранительным органам и госорганам по закону и государственным запросам</td><td>По закону, повесткам, ордерам, решениям суда</td><td>Регуляторам, правоохранительным и иным госорганам, судам — по запросу, когда это обязательно по закону (Политика, п. 7.2)</td><td class="use">Общая политика: Банк вправе передавать данные третьим лицам и партнёрам, госорганам, Банку России, судам при наличии правовых оснований (п. 9.2); отдельная цель — взаимодействие с иностранными госорганами (цель 16). Политика портала: в том числе органам дознания и следствия (п. 6.4)</td></tr>
+      <tr><th>Прочие заявления «не используем»</th>
+        <td class="no">Не принимает решений только на основе автоматической обработки с юридическими последствиями; не собирает данные детей до 18</td><td class="no">Не обрабатывает чувствительные данные для выводов о характеристиках потребителя</td><td class="no">Аудио и видео Gemini Live не идут в обучение по умолчанию; звонки агента и записи аватара не используются для обучения</td><td class="no">Не извлекает голосовые отпечатки и биометрию лица; не делает профилирование; не определяет точную геолокацию без согласия</td><td class="no">Не обучает модели напрямую на исходных вводах; Alibaba Cloud удаляет ввод после генерации ответа</td><td class="no">Для голосового набора письма и записей в календарь передача и использование записей не предусматриваются; статистика публикуется только в агрегированном виде. Общая политика: не собирает целенаправленно чувствительные данные (здоровье, политические взгляды, биометрия); не составляет «портрет» пользователя в степени, существенно влияющей на права; данные из Google API не используются для рекламы и не передаются третьим лицам</td><td class="no">Общая политика (принципы, п. 2.1): не объединять базы данных, цели обработки которых несовместимы; обрабатывать только данные, отвечающие целям. Для платного API (оферта ООО «СалютДевайсы» для физлиц): контент клиента не используется в собственных целях, не связанных с предоставлением сервиса (п. 6.3)</td></tr>
+      <tr class="api"><th>Данные через API</th>
+        <td class="no"><b>Commercial Terms</b> (17.06.2025), разд. B: Anthropic не вправе обучать модели на контенте клиента (запросы и ответы). Отзывы клиента компания может использовать (разд. A.3). Сроки хранения — в DPA</td>
+        <td class="no"><b>Enterprise privacy</b> (08.01.2026): данные API не используются для обучения по умолчанию, только при явном согласии клиента. <mark class="use">Запросы и ответы хранятся до 30 дней для выявления злоупотреблений</mark>; для части эндпоинтов доступен режим Zero Data Retention</td>
+        <td><b>Gemini API Terms</b> (обновлены 28.04.2026). <mark class="use">Бесплатный уровень и AI Studio: запросы и ответы используются для улучшения продуктов и моделей Google, их могут читать ревьюеры</mark>. <mark class="no">Платный уровень: запросы и ответы не используются для улучшения продуктов</mark>, логируются ограниченное время для выявления нарушений. В ЕЭЗ, Великобритании и Швейцарии правила платного уровня действуют и для бесплатного</td>
+        <td class="gap"><b>Условия открытой платформы</b> (с 29.04.2026) не говорят, используются ли вводы API для обучения; сроки хранения не указаны. <mark class="use">Персональные данные разработчика обрабатываются по общей Политике конфиденциальности, которая допускает обучение на вводах и хранение в КНР</mark>; применяется право КНР</td>
+        <td class="no"><b>Alibaba Cloud Model Studio</b> (обновлено 11.10.2026): Alibaba Cloud заявляет, что никогда не использует данные клиента для обучения моделей. Данные вызовов хранятся; срок и регион хранения на странице не указаны</td>
+        <td class="use"><b>Yandex AI Studio:</b> по умолчанию модели сохраняют все данные запросов. Запросы с отключённым логированием не используются для улучшения AI Studio. <mark class="no">Отключение: заголовок <code>x-data-logging-enabled: false</code> в каждом запросе</mark> или параметр SDK</td>
+        <td class="no"><b>Оферта GigaChat API для юрлиц</b> (31.08.2026), п. 7.4: контент клиента не используется в собственных целях исполнителя и Сбербанка, только для предоставления сервиса; использование ответов в маркетинге — только с согласия клиента (п. 7.3). Про обучение прямо не сказано; срок хранения не указан</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="dossiers">
+  <h2>Разбор по компаниям</h2>
+
+  <article class="dossier" id="anthropic">
+    <header><h3>Anthropic — Claude</h3><span class="meta">Privacy Policy, действует с 10 сентября 2026</span></header>
+    <div class="links"><a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Политика конфиденциальности</a><a href="https://www.anthropic.com/legal/consumer-terms" target="_blank" rel="noopener">Потребительские условия</a><a href="https://anthropic.com/legal/non-user-privacy-policy" target="_blank" rel="noopener">Как обучаются модели</a><a href="https://privacy.claude.com/en/articles/12109829-how-do-i-change-my-model-improvement-privacy-settings" target="_blank" rel="noopener">Как отключить обучение</a></div>
+    <ul>
+      <li><b>Что собирается:</b> имя, email, телефон, платёжные данные, ваши запросы и ответы (Inputs / Outputs), отзывы, данные из подключённых сервисов, технические данные устройства и IP. При проверке возраста или личности — фото документа и <mark class="use">шаблоны геометрии лица</mark>.</li>
+      <li><b>Обучение (раздел 2):</b> <mark class="use">запросы и ответы могут использоваться для обучения моделей, если вы не отключили это в настройках аккаунта</mark>.</li>
+      <li><b>Исключения из отказа:</b> <mark class="use">даже после отказа используются чаты, помеченные для проверки безопасности, и материалы, которые вы сами отправили через механизм отзывов</mark>. При оценке ответа значком 👍/👎 может сохраняться весь связанный диалог.</li>
+      <li><b>Обезличивание (раздел 6):</b> отзывы и помеченный контент отвязываются от вашего ID перед обучением, но помеченный контент может быть снова сопоставлен с вами для применения правил.</li>
+      <li><b>Передача:</b> аффилированным лицам, подрядчикам, работодателю (если аккаунт на рабочей почте), госорганам по закону.</li>
+      <li><b>Заявления «не используем»:</b> <mark class="no">Anthropic не продаёт персональные данные</mark>; <mark class="no">не принимает решений исключительно на основе автоматической обработки или профилирования с юридическими последствиями</mark>; <mark class="no">не собирает данные детей младше 18 лет</mark>; политика <mark class="no">не распространяется на данные корпоративных клиентов (Enterprise)</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="openai">
+    <header><h3>OpenAI — ChatGPT</h3><span class="meta">Privacy Policy, обновлена 6 февраля 2026</span></header>
+    <div class="links"><a href="https://openai.com/policies/row-privacy-policy/" target="_blank" rel="noopener">Политика (весь мир)</a><a href="https://openai.com/policies/eu-privacy-policy/" target="_blank" rel="noopener">Версия для ЕЭЗ, UK, Швейцарии</a><a href="https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance" target="_blank" rel="noopener">Как отказаться от обучения</a><a href="https://privacy.openai.com" target="_blank" rel="noopener">privacy.openai.com</a></div>
+    <ul>
+      <li><b>Что собирается:</b> данные аккаунта, дата рождения, платежи, все загружаемые материалы (тексты, файлы, изображения, аудио, видео, данные подключённых сервисов), <mark class="use">контакты из адресной книги, если вы их подключили</mark>, журналы, данные устройства, примерная и (по выбору) точная GPS-геолокация, данные браузера Atlas.</li>
+      <li><b>Обучение (раздел 2):</b> <mark class="use">контент, который вы предоставляете, может использоваться для обучения моделей ChatGPT</mark>; отказаться можно в настройках.</li>
+      <li><b>Мониторинг:</b> <mark class="use">контент, отправляемый на платформе, отслеживается для предотвращения мошенничества и злоупотреблений</mark>; возраст пользователя может оцениваться.</li>
+      <li><b>Хранение (раздел 4):</b> удалённые данные стираются в течение 30 дней, <mark class="use">кроме уже обезличенных и отвязанных от аккаунта для обучения моделей</mark>.</li>
+      <li><b>Передача:</b> подрядчикам, аффилированным лицам, администраторам бизнес-аккаунта (видят ваш контент), родителям подростков при связке аккаунтов, партнёрам по поиску и покупкам, госорганам.</li>
+      <li><b>Заявления «не используем»:</b> <mark class="no">временные чаты не используются для улучшения моделей</mark>; <mark class="no">OpenAI не «продаёт» персональные данные и не «передаёт» их для межконтекстной поведенческой рекламы, не обрабатывает для таргетированной рекламы</mark>; <mark class="no">не обрабатывает чувствительные данные для выводов о характеристиках потребителя</mark>; политика <mark class="no">не распространяется на контент API и бизнес-продуктов</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="gemini">
+    <header><h3>Google — Gemini</h3><span class="meta">Gemini Apps Privacy Notice 29 июня 2026, Privacy Hub 24 сентября 2026</span></header>
+    <div class="links"><a href="https://support.google.com/gemini/answer/13594961?hl=ru" target="_blank" rel="noopener">Gemini Apps Privacy Hub</a><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Политика Google</a><a href="https://myactivity.google.com/product/gemini" target="_blank" rel="noopener">Настройка Keep Activity</a></div>
+    <ul>
+      <li><b>Что собирается:</b> запросы, файлы, фото, экраны, записи и расшифровки Gemini Live, инструкции Gems, данные подключённых приложений (Gmail, Фото, история поиска и YouTube), <mark class="use">журналы звонков и сообщений, контакты, установленные приложения, содержимое экрана</mark> в мобильном приложении, местоположение, cookies удалённого браузера.</li>
+      <li><b>Использование:</b> <mark class="use">для предоставления, улучшения и разработки сервисов, включая генеративные модели ИИ</mark>, персонализации и измерения эффективности.</li>
+      <li><b>Люди читают чаты:</b> <mark class="use">часть чатов просматривают обученные ревьюеры, в том числе сотрудники подрядчиков</mark>; Google прямо просит не вводить конфиденциальную информацию. <mark class="use">Проверенные чаты хранятся до 3 лет и не удаляются при удалении истории</mark>.</li>
+      <li><b>Хранение:</b> история автоматически удаляется через 18 месяцев по умолчанию. При выключенном Keep Activity чаты всё равно хранятся 72 часа и <mark class="use">используются для защиты Google и пользователей, в том числе с участием ревьюеров</mark>. Настройки Gemini не контролируют создание анонимизированных данных из чатов.</li>
+      <li><b>Заявления «не используем»:</b> <mark class="no">при выключенном Keep Activity будущие чаты не используются для обучения моделей (если вы не отправили отзыв)</mark>; <mark class="no">временные чаты не используются для обучения</mark>; <mark class="no">чаты Gemini не используются для показа рекламы</mark>; <mark class="no">Google не продаёт вашу личную информацию</mark>; <mark class="no">аудио, видео и демонстрация экрана Gemini Live не используются для улучшения сервисов по умолчанию</mark>; <mark class="no">записи и расшифровки звонков агента не используются для обучения</mark>; <mark class="no">записи для аватара не используются для обучения, кроме борьбы со злоупотреблениями</mark>; <mark class="no">файлы-источники в Notebooks не используются напрямую для обучения</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="deepseek">
+    <header><h3>DeepSeek</h3><span class="meta">Privacy Policy, обновлена 10 февраля 2026</span></header>
+    <div class="links"><a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html" target="_blank" rel="noopener">Политика конфиденциальности</a><a href="https://cdn.deepseek.com/policies/en-US/model-algorithm-disclosure.html" target="_blank" rel="noopener">Механизм и обучение моделей</a><a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html" target="_blank" rel="noopener">Условия использования</a></div>
+    <ul>
+      <li><b>Что собирается:</b> email или телефон, пароль, дата рождения, текстовый и голосовой ввод, файлы, фото, история чатов, IP, идентификаторы устройства; <mark class="use">присваиваются device ID и user ID для отслеживания активности на разных устройствах</mark>; публичные данные из интернета для обучения.</li>
+      <li><b>Обучение:</b> <mark class="use">данные используются для улучшения и обучения технологий, включая модели машинного обучения, в том числе через мониторинг взаимодействий на всех ваших устройствах</mark>.</li>
+      <li><b>Компании группы:</b> <mark class="use">обрабатывают ваши данные для исследований, обучения и оптимизации базовых моделей, аналитики и хранения</mark>.</li>
+      <li><b>Хранение:</b> <mark class="use">данные собираются, обрабатываются и хранятся в Китайской Народной Республике</mark>; хранятся, пока существует аккаунт.</li>
+      <li><b>Передача:</b> <mark class="use">правоохранительным органам, государственным органам, правообладателям</mark> по закону, юридическому процессу или государственным запросам; поисковым API передаются ключевые слова запросов.</li>
+      <li><b>Отказ:</b> в перечне прав указано право отказаться от использования данных для обучения моделей; реализуется через запрос на privacy@deepseek.com.</li>
+      <li><b>Заявления «не используем»:</b> <mark class="no">не извлекает голосовые отпечатки, данные распознавания лица и иную биометрию из голоса и фото</mark>; <mark class="no">не получает точную геолокацию без вашего явного согласия</mark>; <mark class="no">не занимается таргетированной рекламой, не продаёт персональные данные и не использует их для профилирования</mark>; политика <mark class="no">не распространяется на приложения сторонних разработчиков, построенные на API DeepSeek</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="qwen">
+    <header><h3>Qwen</h3><span class="meta">Privacy Policy, действует с 7 сентября 2026</span></header>
+    <div class="links"><a href="https://qwen.ai/privacypolicy" target="_blank" rel="noopener">Политика конфиденциальности</a><a href="https://chat.qwen.ai/legal-agreement/privacy-policy" target="_blank" rel="noopener">Та же политика через chat.qwen.ai</a></div>
+    <ul>
+      <li><b>Что собирается:</b> запросы, тексты, файлы, изображения, аудио, видео, <mark class="use">записи голоса и видео при использовании голосовых функций</mark>, данные аккаунта (в том числе из Google, Apple, GitHub), отзывы (при 👍/👎 сохраняется диалог), данные устройства и IP, журналы; <mark class="use">данные о вас от рекламных и аналитических партнёров</mark>.</li>
+      <li><b>Обучение (разделы II и IV):</b> <mark class="use">обезличенный пользовательский контент и отзывы могут использоваться для обучения и улучшения моделей</mark> на основании «законного интереса». Отдельный способ отказаться от этого в политике не описан.</li>
+      <li><b>Передача:</b> Alibaba Cloud (Singapore) обрабатывает запросы и хранит данные; <mark class="use">часть автоматически собранных данных об устройстве передаётся рекламным и аналитическим партнёрам</mark>; <mark class="use">аффилированные компании получают данные для исследований, аналитики и модерации</mark>.</li>
+      <li><b>Хранение:</b> данные обрабатываются и хранятся в Сингапуре; срок — «сколько необходимо».</li>
+      <li><b>Заявления «не используем»:</b> <mark class="no">исходные (сырые) вводы не используются для прямого обучения моделей</mark>; <mark class="no">ввод вручную не просматривается, кроме случаев безопасности, злоупотреблений, отладки и требований закона</mark>; <mark class="no">Alibaba Cloud удаляет ваш ввод после генерации ответа и не хранит его отдельно</mark>; <mark class="no">не принимаются решения на основе автоматической обработки с юридическими последствиями</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="yandex">
+    <header><h3>Яндекс — Алиса AI</h3><span class="meta">Условия использования «Алиса AI» от 10 сентября 2026; лицензионное соглашение приложения от 10 апреля 2026</span></header>
+    <div class="links"><a href="https://yandex.ru/legal/alice_chat/ru/" target="_blank" rel="noopener">Условия «Алиса AI»</a><a href="https://www.yandex.ru/legal/aliceapp/ru/" target="_blank" rel="noopener">Лицензия приложения «Алиса AI»</a><a href="https://yandex.ru/legal/confidential" target="_blank" rel="noopener">Политика конфиденциальности Яндекса</a><a href="https://id.yandex.ru/personal/data-access" target="_blank" rel="noopener">Отказ от участия в улучшении</a></div>
+    <ul>
+      <li><b>Оператор:</b> ООО «Платформа ИИ-решений» (Москва). Сервис работает в приложениях «Алиса AI», «Яндекс — с Алисой», в Яндекс Браузере, в поиске и на alice.yandex.ru. Применяется право РФ.</li>
+      <li><b>Что собирается (лицензия приложения, п. 5.8):</b> тип ОС, <mark class="use">сведения о SIM-карте, геопозиция</mark>, идентификатор приложения, статистика использования, данные привязанных устройств, <mark class="use">голосовые записи, поисковые запросы</mark>. При вызове Алисы в Яндекс Браузере <mark class="use">может обрабатываться содержимое открытой страницы, включая персональные данные</mark> (п. 2.8). Для агента бронирования используются имя, адрес, телефон и email из Яндекс ID и история бронирований (п. 2.12.2).</li>
+      <li><b>Улучшение сервисов (п. 6.6):</b> <mark class="use">Яндекс вправе использовать запросы, их части, загруженные материалы и любые данные, полученные при выполнении запросов, для улучшения сервисов Яндекса и аффилированных лиц</mark>. От этого можно отказаться в настройках Яндекс ID.</li>
+      <li><b>Лицензия на запросы (п. 4.3):</b> отправляя запрос, вы даёте Яндексу <mark class="use">безвозмездную и безотзывную лицензию на запрос и загруженные файлы, включая видео и снимки камеры, по всему миру</mark>: для совершенствования алгоритмов и технологий (анонимно), <mark class="use">для размещения в сервисах Яндекса с доступом неопределённого круга лиц, как анонимно, так и с привязкой к вашему имени</mark>, с правом сублицензии третьим лицам без вашего согласия.</li>
+      <li><b>Ответы сервиса (п. 3.4):</b> <mark class="use">любой сгенерированный контент может использоваться Яндексом и аффилированными компаниями анонимно в любых целях, по всему миру, без ограничения срока</mark>.</li>
+      <li><b>Статистика (п. 6.5):</b> данные обрабатываются Яндексом и аффилированными лицами для исследований и статистики, в том числе для предоставления третьим лицам; публикуются только в агрегированном виде.</li>
+      <li><b>Голосовые записи (лицензия приложения):</b> <mark class="use">обезличенные записи могут получать сотрудники Яндекса и подрядчики</mark> для анализа и совершенствования программы. Настройки использования голосовых данных доступны в личном кабинете.</li>
+      <li><b>Хранение (п. 6.2):</b> согласие на хранение и обработку в других юрисдикциях, включая Россию, действует весь период использования и 10 лет после. По достижении целей данные уничтожаются.</li>
+      <li><b>Общая Политика конфиденциальности (26.08.2025):</b> действует для ООО «ЯНДЕКС» и компаний группы. <mark class="use">Собираются история поисковых запросов, покупки, посещённые организации, лайки, адреса переписки, данные телефонной книги, файлы в системах Яндекса, геолокация, данные Wi-Fi и платёжных карт; данные из разных сервисов сопоставляются с учётной записью</mark> (разд. 4). Яндекс получает данные и от партнёров: рекламодателей, служб такси.</li>
+      <li><b>Цели (разд. 5):</b> <mark class="use">персонализация рекламы и предложений по истории поиска и другим данным, улучшение других продуктов Яндекса, создание новых продуктов, большие данные и исследования, проверка благонадёжности</mark>.</li>
+      <li><b>Передача (разд. 7):</b> <mark class="use">компаниям группы Яндекса; рекламным сетям, рекламодателям, владельцам сайтов и приложений; службам такси; платёжным системам; госорганам, правоохранительным органам и судам по обязательному запросу</mark>. Для граждан РФ данные хранятся в базах на территории России (п. 7.3).</li>
+      <li><b>Управление:</b> удалить данные можно в разделе «Управление данными» Яндекс ID; персонализацию рекламы отключить на yandex.ru/tune/adv.</li>
+      <li><b>Заявления «не используем»:</b> <mark class="no">Яндекс не собирает целенаправленно чувствительные данные (раса, политические взгляды, здоровье, биометрия)</mark>, но обрабатывает их, если вы сами их ввели, например в запросе о здоровье; <mark class="no">не собирает данные для «портрета» пользователя в степени, существенно влияющей на права и свободы</mark>; <mark class="no">в большинстве случаев данные обрабатываются автоматически без доступа сотрудников</mark>. <mark class="no">При голосовом наборе письма и записей в календарь передача и использование записей не предусматриваются</mark>; <mark class="no">результаты статистической обработки публикуются только в виде, не позволяющем идентифицировать пользователя</mark>. Отдельно Яндекс пишет, что не имеет технической возможности и не обязан модерировать и просматривать размещаемую информацию (п. 5.4).</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="sber">
+    <header><h3>Сбер — GigaChat</h3><span class="meta">Пользовательское соглашение об использовании Сервиса GigaChat, обновлено 22 июня 2026</span></header>
+    <div class="links"><a href="https://developers.sber.ru/docs/ru/policies/gigachat/agreement" target="_blank" rel="noopener">Пользовательское соглашение GigaChat</a><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/individuals" target="_blank" rel="noopener">Оферта GigaChat API для физлиц</a><a href="https://www.sberbank.ru/privacy/policy#pdn" target="_blank" rel="noopener">Политика обработки ПД Сбербанка</a></div>
+    <ul>
+      <li><b>Оператор:</b> ПАО Сбербанк. Сервис доступен через портал Банка и API; пользователь — совершеннолетний дееспособный резидент РФ. Персональные данные обрабатываются по Политике обработки ПД Сбербанка (п. 7.1).</li>
+      <li><b>Обучение:</b> в соглашении <mark class="use">не сказано ни что запросы используются для обучения, ни что не используются</mark>. Пользователю запрещено использовать полученное в сервисе для разработки конкурирующих моделей (п. 4.5.7).</li>
+      <li><b>Лицензия на ваши запросы (п. 5.3):</b> <mark class="use">размещая контент в сервисе или передавая его через API, вы даёте Банку неисключительную безвозмездную лицензию на весь срок действия права, на всей территории и любыми способами</mark>; для баз данных — включая извлечение материалов.</li>
+      <li><b>Лицензия на ответы (п. 5.2):</b> <mark class="use">безотзывная и безвозмездная лицензия Банку на сгенерированный контент: хранение на серверах Банка и аффилированных лиц, сублицензирование третьим лицам, публичный показ в целях продвижения и рекламы, переработка, использование в рекламных и маркетинговых материалах Банка</mark>.</li>
+      <li><b>Персональные данные в запросах (пп. 7.1–7.6):</b> сервис не предназначен для запросов с персональными данными; пользователь обязуется их не отправлять, а если отправит, сам отвечает за законность обработки и возмещает Банку убытки.</li>
+      <li><b>Передача:</b> <mark class="use">партнёрам ООО «Звук» и ООО «РИХ» передаются цифровой идентификатор, сгенерированный и пользовательский контент и технические сведения</mark>, когда вы запускаете их сервис (п. 7.9).</li>
+      <li><b>Хранение:</b> на серверах, назначенных Банком; место и срок не указаны.</li>
+      <li><b>Политика конфиденциальности портала developers.sber.ru (10.02.2025):</b> оператор ПАО Сбербанк; через этот портал подключается GigaChat API. Собираются данные для идентификации (в том числе через Сбер ID), данные аккаунта, <mark class="use">данные от третьих лиц, в том числе из группы компаний Банка</mark>, cookies (разд. 2). Цели: работа портала, его улучшение, <mark class="use">рекламно-информационные рассылки</mark> (п. 3.1). Передача: другим участникам портала, третьим лицам по договорам или с вашего согласия, <mark class="use">госорганам по закону, в том числе органам дознания и следствия</mark> (разд. 6). Срок: уничтожение в течение 30 дней после достижения цели (п. 7.1). Запросы о своих данных — на pdn-org@sberbank.ru, ответ в течение 30 дней (п. 9.1). Про обучение ИИ, продажу данных и место хранения в политике ничего не сказано.</li>
+      <li><b>Политика обработки ПД ПАО Сбербанк</b> (утв. постановлением Правления № 18§12а от 10.09.2025; <a href="https://www.sberbank.ru/privacy/policy#pdn" target="_blank" rel="noopener">sberbank.ru/privacy/policy</a>). На неё ссылается соглашение GigaChat (п. 7.1). Это общий документ банка: ИИ, GigaChat и запросы к чат-боту в нём отдельно не упоминаются. В перечне 16 целей обработки для клиентов важны:
+        <ul>
+          <li><b>Цель 5, персонализированные предложения:</b> <mark class="use">определение интересов, в том числе выявленных автоматизированными системами Банка; формирование единого профиля клиента; оценка условий договоров для персонального предложения</mark>; касается и клиентов партнёров, и пользователей сайтов и приложений.</li>
+          <li><b>Цель 6, информирование и реклама:</b> <mark class="use">рекламные материалы по звонкам, SMS, push и e-mail, в том числе о проектах партнёров и третьих лиц</mark>.</li>
+          <li><b>Цель 7, развитие продуктов:</b> <mark class="use">аналитика, улучшение существующих и разработка новых продуктов на данных о действиях на сайте и в приложениях, транзакциях, доходах, расходах, интересах, семье и детях, профиле в соцсетях, чеках, обращениях</mark>.</li>
+        </ul>
+      </li>
+      <li><b>Передача (п. 9.2):</b> <mark class="use">Банк вправе передавать данные третьим лицам и партнёрам, госорганам, внебюджетным фондам, Банку России, судам, а также поручать им обработку</mark> при наличии правовых оснований. Отдельная цель 16 — взаимодействие с иностранными госорганами.</li>
+      <li><b>Хранение и сроки:</b> данные граждан РФ хранятся в базах на территории России, кроме случаев закона (п. 9.1); не дольше, чем требуют цели (п. 4.3). Уничтожаются при достижении цели, отзыве согласия или требовании прекратить обработку (п. 4.4); конкретные сроки — во внутренних документах Банка.</li>
+      <li><b>Права (п. 9.3):</b> получить сведения об обработке, потребовать уточнить, заблокировать или уничтожить данные, прекратить обработку, отозвать согласие. Банк при этом вправе обрабатывать данные без согласия в случаях, предусмотренных законом (п. 9.2).</li>
+      <li><b>Заявления «не используем»:</b> <mark class="no">не объединять базы данных, обработка которых ведётся в несовместимых целях; обрабатывать только данные, отвечающие целям; хранить не дольше, чем требуют цели</mark> (принципы, п. 2.1). Заявления, что данные не продаются, в политике нет.</li>
+      <li><b>Заявления «не используем»:</b> в пользовательском соглашении таких заявлений нет. В отдельной оферте на платный GigaChat API для физлиц (ООО «СалютДевайсы», 06.02.2026) указано: <mark class="no">контент клиента не используется в собственных целях, не связанных с предоставлением сервиса</mark>, а <mark class="no">маркетинговое использование сгенерированного контента возможно только с предварительного согласия клиента</mark> (пп. 6.2–6.3).</li>
+    </ul>
+  </article>
+</section>
+
+<section class="prose">
+  <h2>Источники</h2>
+  <ul class="src">
+    <li><b>Anthropic</b><a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">anthropic.com/legal/privacy</a></li>
+    <li><b>OpenAI</b><a href="https://openai.com/policies/row-privacy-policy/" target="_blank" rel="noopener">openai.com/policies/row-privacy-policy</a></li>
+    <li><b>Google Gemini</b><a href="https://support.google.com/gemini/answer/13594961" target="_blank" rel="noopener">support.google.com/gemini/answer/13594961</a></li>
+    <li><b>DeepSeek</b><a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html" target="_blank" rel="noopener">cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html</a></li>
+    <li><b>Qwen</b><a href="https://qwen.ai/privacypolicy" target="_blank" rel="noopener">qwen.ai/privacypolicy</a></li>
+    <li><b>Яндекс</b><a href="https://yandex.ru/legal/alice_chat/ru/" target="_blank" rel="noopener">yandex.ru/legal/alice_chat</a><a href="https://www.yandex.ru/legal/aliceapp/ru/" target="_blank" rel="noopener">yandex.ru/legal/aliceapp</a><a href="https://yandex.ru/legal/confidential/" target="_blank" rel="noopener">yandex.ru/legal/confidential</a></li>
+    <li><b>Сбер</b><a href="https://developers.sber.ru/docs/ru/policies/gigachat/agreement" target="_blank" rel="noopener">developers.sber.ru/…/gigachat/agreement</a><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/individuals" target="_blank" rel="noopener">developers.sber.ru/…/gigachat-agreement/individuals</a><a href="https://developers.sber.ru/docs/ru/policies/privacy-policy" target="_blank" rel="noopener">developers.sber.ru/…/privacy-policy</a><a href="https://www.sberbank.ru/privacy/policy#pdn" target="_blank" rel="noopener">sberbank.ru/privacy/policy</a></li>
+  </ul>
+  <h3>Документы по API</h3>
+  <ul class="src">
+    <li><b>Anthropic</b><a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">anthropic.com/legal/commercial-terms</a></li>
+    <li><b>OpenAI</b><a href="https://openai.com/enterprise-privacy/" target="_blank" rel="noopener">openai.com/enterprise-privacy</a></li>
+    <li><b>Google Gemini</b><a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">ai.google.dev/gemini-api/terms</a></li>
+    <li><b>DeepSeek</b><a href="https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html" target="_blank" rel="noopener">deepseek open platform terms</a></li>
+    <li><b>Qwen</b><a href="https://www.alibabacloud.com/help/en/model-studio/privacy-notice" target="_blank" rel="noopener">alibabacloud.com/help/en/model-studio/privacy-notice</a></li>
+    <li><b>Яндекс</b><a href="https://aistudio.yandex.ru/docs/ru/ai-studio/operations/disable-logging.html" target="_blank" rel="noopener">aistudio.yandex.ru — отключение логирования</a></li>
+    <li><b>Сбер</b><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/corporate-clients-prepaid" target="_blank" rel="noopener">оферта GigaChat API для юрлиц</a><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/individuals" target="_blank" rel="noopener">для физлиц</a></li>
+  </ul>
+  <p class="meta">Политики меняются. Перед важным решением сверьтесь с текущей редакцией по ссылке.</p>
+</section>
+
+</div>
+
+</body></html>

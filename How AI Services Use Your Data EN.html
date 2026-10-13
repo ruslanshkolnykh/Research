@@ -1,0 +1,319 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>How AI Services Use Your Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column of policy dossiers, wide comparison table on its own scroll track */
+:root{
+  --bg:#f7f8f6; --surface:#ffffff; --fg:#1d2320; --muted:#5d6762; --line:#d9dfdb;
+  --accent:#2b4c6f;
+  --use-bg:#fdeec8; --use-fg:#6b4a00;
+  --no-bg:#d6f2dc; --no-fg:#155a2a;
+  --gap-bg:#eceff1; --gap-fg:#3e4a52;
+  --display:"PT Serif", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141917; --surface:#1b211f; --fg:#e6ebe8; --muted:#9aa5a0; --line:#2e3733;
+  --accent:#8fb4dc;
+  --use-bg:#4a3a12; --use-fg:#fbe2a0;
+  --no-bg:#173d24; --no-fg:#a8ecbb;
+  --gap-bg:#252d33; --gap-fg:#c4ced5;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141917; --surface:#1b211f; --fg:#e6ebe8; --muted:#9aa5a0; --line:#2e3733;
+  --accent:#8fb4dc;
+  --use-bg:#4a3a12; --use-fg:#fbe2a0;
+  --no-bg:#173d24; --no-fg:#a8ecbb;
+  --gap-bg:#252d33; --gap-fg:#c4ced5;
+  color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:20px;padding-block:40px 64px;display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2.2rem}
+h2{font-size:1.55rem}
+h3{font-size:1.15rem;font-family:var(--body);font-weight:600}
+p{margin:0}
+.prose{max-width:68ch;display:flex;flex-direction:column;gap:12px}
+.meta{font-family:var(--mono);font-size:.8rem;color:var(--muted);letter-spacing:.02em}
+a{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+mark{padding:1px 4px;border-radius:3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+mark.use{background:var(--use-bg);color:var(--use-fg)}
+mark.no{background:var(--no-bg);color:var(--no-fg);font-weight:500}
+.legend{display:flex;flex-wrap:wrap;gap:10px 20px;font-size:.92rem}
+.legend span{display:flex;align-items:center;gap:8px}
+.sw{width:14px;height:14px;border-radius:3px;display:inline-block}
+.sw.use{background:var(--use-bg);border:1px solid var(--use-fg)}
+.sw.no{background:var(--no-bg);border:1px solid var(--no-fg)}
+.sw.gap{background:var(--gap-bg);border:1px solid var(--gap-fg)}
+.note{border-left:3px solid var(--accent);padding:10px 16px;background:var(--surface);font-size:.95rem;max-width:80ch;display:flex;flex-direction:column;gap:8px}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;min-width:1400px;width:100%;font-size:.86rem;line-height:1.45}
+th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:10px 12px;vertical-align:top;text-align:left}
+th:last-child,td:last-child{border-right:0}
+tr:last-child td{border-bottom:0}
+thead th{font-family:var(--display);font-size:1rem;background:var(--surface)}
+thead th.ru{border-top:3px solid var(--accent)}
+tbody th{font-weight:600;width:140px;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;position:sticky;left:0;background:var(--surface)}
+td.no{background:var(--no-bg);color:var(--no-fg)}
+td.use{background:var(--use-bg);color:var(--use-fg)}
+td.gap{background:var(--gap-bg);color:var(--gap-fg)}
+tr.api th, tr.api td{border-top:3px solid var(--accent)}
+tr.docs td{background:var(--bg)}
+.doclist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.doclist a{overflow-wrap:anywhere}
+td mark{display:inline}
+.dossiers{display:flex;flex-direction:column;gap:32px}
+.dossier{display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:1px solid var(--line)}
+.dossier header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.dossier ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;max-width:80ch}
+.links{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem}
+.src{list-style:none;padding:0;margin:0;display:grid;gap:6px;font-size:.92rem}
+.src li{display:flex;flex-wrap:wrap;gap:4px 10px}
+.src b{min-width:110px}
+code{font-family:var(--mono);font-size:.85em}
+</style>
+
+<div class="wrap">
+
+<header class="prose">
+  <p class="meta">Checked against primary sources on 13 October 2026 · <a href="https://claude.ai/artifact/U6YpqS1KcWzrz2Z3vu6DrP" target="_blank" rel="noopener">Русская версия</a></p>
+  <h1>How AI services use your data</h1>
+  <p>A comparison of the consumer privacy policies and terms of Anthropic (Claude), OpenAI (ChatGPT), Google (Gemini), DeepSeek, Qwen, Yandex (Alice AI) and Sber (GigaChat). Every statement below comes from the current version of the company's official document, linked in the table and on each company card. No third-party reviews or summaries were used.</p>
+  <div class="legend" aria-label="Legend">
+    <span><i class="sw use"></i>Where and how your data is used</span>
+    <span><i class="sw no"></i>Where the company states your data is NOT used</span>
+    <span><i class="sw gap"></i>Not stated in the document</span>
+  </div>
+</header>
+
+<div class="note">
+  <p>The comparison covers consumer services (chatbots and apps). Business plans and APIs are governed by separate agreements and documents; the bottom row of the table covers the API. Russian-language documents are paraphrased closely in English.</p>
+  <p>For Yandex, the Alice AI terms and Yandex's general Privacy Policy (26.08.2025) were analysed. For Sber, the GigaChat user agreement and the privacy policy of the developers.sber.ru portal (10.02.2025), through which the GigaChat API is accessed. Sberbank's Personal Data Processing Policy (approved 10.09.2025), referenced by the GigaChat agreement, was analysed from a copy of the page supplied by the user.</p>
+</div>
+
+<section style="display:flex;flex-direction:column;gap:16px">
+  <h2>Comparison table</h2>
+  <p class="meta">The table scrolls sideways. The Russian services are the two right-hand columns.</p>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th></th><th>Anthropic (Claude)</th><th>OpenAI (ChatGPT)</th><th>Google (Gemini)</th><th>DeepSeek</th><th>Qwen</th><th class="ru">Yandex (Alice AI)</th><th class="ru">Sber (GigaChat)</th></tr></thead>
+    <tbody>
+      <tr class="docs"><th>Documents used for the analysis</th>
+        <td><ul class="doclist">
+          <li><a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="https://privacy.claude.com/en/articles/12109829-how-do-i-change-my-model-improvement-privacy-settings" target="_blank" rel="noopener">Privacy Center: training setting</a></li>
+          <li><a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">Commercial Terms (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://openai.com/policies/row-privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="https://openai.com/enterprise-privacy/" target="_blank" rel="noopener">Enterprise privacy (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://support.google.com/gemini/answer/13594961" target="_blank" rel="noopener">Gemini Apps Privacy Hub</a></li>
+          <li><a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">Gemini API Additional Terms</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html" target="_blank" rel="noopener">Open Platform Terms (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://qwen.ai/privacypolicy" target="_blank" rel="noopener">Qwen Privacy Policy</a></li>
+          <li><a href="https://www.alibabacloud.com/help/en/model-studio/privacy-notice" target="_blank" rel="noopener">Model Studio privacy notice (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://yandex.ru/legal/alice_chat/ru/" target="_blank" rel="noopener">Alice AI Terms of Use</a></li>
+          <li><a href="https://www.yandex.ru/legal/aliceapp/ru/" target="_blank" rel="noopener">Alice AI app licence agreement</a></li>
+          <li><a href="https://yandex.ru/legal/confidential/" target="_blank" rel="noopener">Yandex Privacy Policy</a></li>
+          <li><a href="https://aistudio.yandex.ru/docs/ru/ai-studio/operations/disable-logging.html" target="_blank" rel="noopener">AI Studio: disabling logging (API)</a></li>
+        </ul></td>
+        <td><ul class="doclist">
+          <li><a href="https://developers.sber.ru/docs/ru/policies/gigachat/agreement" target="_blank" rel="noopener">GigaChat User Agreement</a></li>
+          <li><a href="https://www.sberbank.ru/privacy/policy#pdn" target="_blank" rel="noopener">Sberbank Personal Data Policy</a></li>
+          <li><a href="https://developers.sber.ru/docs/ru/policies/privacy-policy" target="_blank" rel="noopener">developers.sber.ru portal policy</a></li>
+          <li><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/individuals" target="_blank" rel="noopener">API offer for individuals</a></li>
+          <li><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/corporate-clients-prepaid" target="_blank" rel="noopener">API offer for businesses</a></li>
+        </ul></td></tr>
+      <tr><th>Version</th>
+        <td>Effective 10.09.2026</td><td>Updated 06.02.2026</td><td>Notice 29.06.2026, Privacy Hub 24.09.2026</td><td>Updated 10.02.2026</td><td>Effective 07.09.2026</td><td>Alice AI terms of 10.09.2026; app licence of 10.04.2026</td><td>GigaChat User Agreement, updated 22.06.2026</td></tr>
+      <tr><th>Operator / jurisdiction</th>
+        <td>Anthropic PBC (USA); for the EEA, UK and Switzerland, Anthropic Ireland</td><td>OpenAI OpCo (USA); for the EEA and Switzerland, OpenAI Ireland</td><td>Google LLC; for the EEA and Switzerland, Google Ireland</td><td>Hangzhou DeepSeek Artificial Intelligence Co. (China)</td><td>NTH Power Global Tech Singapore (Singapore); models run by Alibaba Cloud Singapore</td><td>Platforma II-resheniy LLC (Moscow); Russian law applies</td><td>Sberbank PJSC; Russian law applies</td></tr>
+      <tr><th>Where data is stored</th>
+        <td>Servers in the US and other countries</td><td>The US and countries of partners and vendors</td><td>Under Google's general policy</td><td class="use">People's Republic of China</td><td>Singapore</td><td>For Russian citizens, data is recorded and stored in databases in Russia (Policy, s. 7.3); for other countries it may be transferred to Russia</td><td>In the computer memory of the Bank and its affiliates and on servers designated by the Bank (agreement, cl. 5.2.1). General policy: Russian citizens' data is stored in databases in Russia, except as provided by law (cl. 9.1)</td></tr>
+      <tr><th>Training models on your chats</th>
+        <td class="use">Yes, by default, unless turned off in settings</td><td class="use">Yes, by default, unless turned off in settings</td><td class="use">Yes, while Keep Activity is on (on by default)</td><td class="use">Yes, including by group companies for training foundation models</td><td class="use">Yes, but only de-identified content and feedback</td><td class="use">Yes, by default: requests, files and data obtained are used to improve the services of Yandex and its affiliates (cl. 6.6) and to improve algorithms and technologies (cl. 4.3). The word "training" is not used</td><td class="gap">Training or model improvement is not mentioned. The Bank does receive a licence to your requests "by any means" with no territorial limit (cl. 5.3). <mark class="use">General policy (purpose 7): customer data, including transactions, income, spending, social media profile and enquiries, is processed to develop products</mark>; AI is not mentioned</td></tr>
+      <tr><th>Can you opt out</th>
+        <td>Yes, a toggle in privacy settings</td><td>Yes, in Data Controls or at privacy.openai.com</td><td>Yes, turn off Keep Activity</td><td>The right to opt out is listed; exercised by emailing privacy@deepseek.com</td><td class="gap">No separate training opt-out is described</td><td>Yes, in Yandex ID settings: id.yandex.ru/personal/data-access (cl. 6.6)</td><td class="gap">The agreement describes no opt-out; if you disagree you must stop using the service (cl. 2.3). General policy: you can demand that processing stop and withdraw consent (cl. 9.3); there is no separate opt-out for requests</td></tr>
+      <tr><th>What is still used after opting out</th>
+        <td class="use">Chats flagged by safety systems and material you submit as feedback (👍/👎)</td><td class="gap">No post-opt-out training exceptions are listed</td><td class="use">Chats are kept for 72 hours; used for safety with human reviewers; feedback goes into training; the setting does not cover creating anonymised data</td><td class="gap">Not stated</td><td class="gap">Not applicable (no opt-out described)</td><td class="use">The opt-out covers only cl. 6.6. Service responses may be used by Yandex anonymously "for any purpose" indefinitely (cl. 3.4); the licence to requests is irrevocable (cl. 4.3)</td><td class="gap">Not applicable (no opt-out described)</td></tr>
+      <tr><th>Humans reading chats</th>
+        <td>Review of flagged content for violations</td><td>Content monitoring to prevent abuse</td><td class="use">Yes: some chats are read by reviewers, including contractors; these are kept up to 3 years and are not deleted with your history</td><td class="gap">Not stated</td><td class="no">No manual review except for security, abuse, debugging and legal requirements</td><td class="use">De-identified voice recordings may be accessed by Yandex staff and contractors (app licence, cl. 5.8). For text requests, Yandex says it has no technical means or obligation to moderate content (cl. 5.4). General policy: data is mostly processed automatically; staff get access only when needed (s. 6)</td><td class="gap">Not stated</td></tr>
+      <tr><th>"No-trace" mode</th>
+        <td class="gap">Not described in the policy</td><td class="no">Temporary Chat: not saved to history, not used for training; deleted within 30 days</td><td class="no">Temporary chats: not used to train Google's models</td><td class="gap">Not described</td><td class="gap">Not described</td><td class="gap">Not described</td><td class="gap">Not described</td></tr>
+      <tr><th>Retention</th>
+        <td>A deleted chat is erased from the back end within 30 days</td><td>Deleted data is erased within 30 days, except data already de-identified for training</td><td>Auto-deletion after 18 months by default (3, 36 months or never also available)</td><td>As long as the account exists; longer for violations</td><td>"As long as necessary"; some data up to 5 years in Indonesia</td><td>As long as needed for the purpose or by law; data can be deleted in Yandex ID "Data management" (Policy, s. 8). Consent to cross-border processing lasts 10 years after you stop using the service (terms, cl. 6.2)</td><td class="gap">Retention of requests is not stated. General policy: no longer than the purposes require unless the law says otherwise (cl. 4.3); destroyed when the purpose is achieved, consent is withdrawn or processing must stop (cl. 4.4). developers.sber.ru policy: destroyed within 30 days after the purpose is achieved, otherwise blocked and destroyed within 6 months (cl. 7.1, 7.3)</td></tr>
+      <tr><th>Advertising and publication</th>
+        <td class="no">Does not sell data; you can opt out of sharing for targeted advertising of its own products</td><td class="no">Does not sell, does not share for behavioural advertising and does not process for targeted advertising (US state disclosures)</td><td class="no">Gemini chats are not used to show ads; Google does not sell personal information</td><td class="no">No targeted advertising and no sale of data</td><td class="use">Shares some device data with advertising and analytics partners; receives data from them</td><td class="use">Requests and uploaded files may be placed in Yandex services for public access, including linked to your name, with a right to sublicense (cl. 4.3). General policy: ads are personalised by search history and other data (s. 5); data may be shared with advertisers and ad networks (s. 7.2). Turn off personalisation: yandex.ru/tune/adv</td><td class="use">Generated content may be used in the Bank's advertising and marketing, shown publicly and sublicensed to third parties (cl. 5.2). General policy (purposes 5 and 6): personalised offers based on interests, including those identified by the Bank's automated systems; a single customer profile; advertising calls, SMS, push and email, including about partners' and third parties' products. developers.sber.ru policy: promotional mailings (cl. 3.1)</td></tr>
+      <tr><th>Sale of data</th>
+        <td class="no">Does not sell</td><td class="no">Does not sell</td><td class="no">Does not sell</td><td class="no">Does not sell</td><td class="gap">No explicit statement</td><td class="gap">No explicit statement in the terms or the Privacy Policy</td><td class="gap">No explicit statement in the agreement, Sberbank's general policy or the developers.sber.ru policy</td></tr>
+      <tr><th>Disclosure to authorities</th>
+        <td>Under law, legal process or enforceable government request</td><td>Under law and to protect rights, safety and prevent fraud</td><td>Under law and enforceable government requests</td><td class="use">To law enforcement and public authorities under law and government requests</td><td>Under law, subpoenas, warrants, court orders</td><td>To regulators, law enforcement and other authorities and courts, on request where required by law (Policy, s. 7.2)</td><td class="use">General policy: the Bank may transfer data to third parties and partners, authorities, the Bank of Russia and courts where there is a legal basis (cl. 9.2); a separate purpose covers dealings with foreign authorities (purpose 16). Portal policy: including to inquiry and investigation bodies (cl. 6.4)</td></tr>
+      <tr><th>Other "we don't use" statements</th>
+        <td class="no">No decisions based solely on automated processing with legal effects; does not collect data from children under 18</td><td class="no">Does not process sensitive data to infer consumer characteristics</td><td class="no">Gemini Live audio and video are not used for training by default; agentic call transcripts and avatar recordings are not used for training</td><td class="no">Does not extract voiceprints or facial biometrics; no profiling; no precise geolocation without consent</td><td class="no">Does not train models directly on raw inputs; Alibaba Cloud deletes inputs after generating a response</td><td class="no">For voice dictation of emails and calendar entries, recordings are not transferred or used; statistics are published only in aggregate. General policy: does not intentionally collect sensitive data (health, political views, biometrics); does not build a user "profile" to an extent that significantly affects rights; Google API data is not used for ads or shared with third parties</td><td class="no">General policy (principles, cl. 2.1): do not combine databases with incompatible purposes; process only data relevant to the purposes. For the paid API (SaluteDevices offer for individuals): customer content is not used for own purposes unrelated to providing the service (cl. 6.3)</td></tr>
+      <tr class="api"><th>Data via the API</th>
+        <td class="no"><b>Commercial Terms</b> (17.06.2025), s. B: Anthropic may not train models on customer content (inputs and outputs). Customer feedback may be used (s. A.3). Retention is set in the DPA</td>
+        <td class="no"><b>Enterprise privacy</b> (08.01.2026): API data is not used for training by default, only with the customer's explicit opt-in. <mark class="use">Inputs and outputs are kept up to 30 days to detect abuse</mark>; Zero Data Retention is available for some endpoints</td>
+        <td><b>Gemini API Terms</b> (updated 28.04.2026). <mark class="use">Free tier and AI Studio: prompts and responses are used to improve Google products and models and may be read by reviewers</mark>. <mark class="no">Paid tier: prompts and responses are not used to improve products</mark>; logged for a limited time to detect violations. In the EEA, UK and Switzerland, paid-tier rules also apply to the free tier</td>
+        <td class="gap"><b>Open Platform Terms</b> (from 29.04.2026) do not say whether API inputs are used for training; retention is not stated. <mark class="use">The developer's personal data is processed under the general Privacy Policy, which allows training on inputs and storage in the PRC</mark>; PRC law applies</td>
+        <td class="no"><b>Alibaba Cloud Model Studio</b> (updated 11.10.2026): Alibaba Cloud states it will never use customer data for model training. Call data is stored; retention period and region are not stated on the page</td>
+        <td class="use"><b>Yandex AI Studio:</b> by default models store all request data. Requests with logging disabled are not used to improve AI Studio. <mark class="no">Disable with the <code>x-data-logging-enabled: false</code> header on each request</mark> or an SDK parameter</td>
+        <td class="no"><b>GigaChat API offer for businesses</b> (31.08.2026), cl. 7.4: customer content is not used for the own purposes of the provider and Sberbank, only to provide the service; using outputs in marketing requires the customer's consent (cl. 7.3). Training is not mentioned; retention is not stated</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="dossiers">
+  <h2>Company by company</h2>
+
+  <article class="dossier" id="anthropic">
+    <header><h3>Anthropic — Claude</h3><span class="meta">Privacy Policy, effective 10 September 2026</span></header>
+    <div class="links"><a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Privacy Policy</a><a href="https://www.anthropic.com/legal/consumer-terms" target="_blank" rel="noopener">Consumer Terms</a><a href="https://anthropic.com/legal/non-user-privacy-policy" target="_blank" rel="noopener">How models are trained</a><a href="https://privacy.claude.com/en/articles/12109829-how-do-i-change-my-model-improvement-privacy-settings" target="_blank" rel="noopener">How to turn off training</a></div>
+    <ul>
+      <li><b>What is collected:</b> name, email, phone, payment details, your inputs and outputs, feedback, data from connected services, device technical data and IP. For age or identity verification, an ID image and <mark class="use">facial geometry templates</mark>.</li>
+      <li><b>Training (section 2):</b> <mark class="use">inputs and outputs may be used to train models unless you opt out in your account settings</mark>.</li>
+      <li><b>Exceptions to the opt-out:</b> <mark class="use">even after opting out, chats flagged for safety review and material you report through feedback are used</mark>. Rating a response with 👍/👎 may store the whole related conversation.</li>
+      <li><b>De-identification (section 6):</b> feedback and flagged content are disassociated from your user ID before training, but flagged content may be re-identified to enforce policies.</li>
+      <li><b>Disclosure:</b> to affiliates, vendors, your employer (if the account uses a work email), and authorities under law.</li>
+      <li><b>"We don't use" statements:</b> <mark class="no">Anthropic does not sell personal data</mark>; <mark class="no">makes no decisions based solely on automated processing or profiling with legal effects</mark>; <mark class="no">does not collect data from children under 18</mark>; the policy <mark class="no">does not apply to enterprise customer data</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="openai">
+    <header><h3>OpenAI — ChatGPT</h3><span class="meta">Privacy Policy, updated 6 February 2026</span></header>
+    <div class="links"><a href="https://openai.com/policies/row-privacy-policy/" target="_blank" rel="noopener">Policy (rest of world)</a><a href="https://openai.com/policies/eu-privacy-policy/" target="_blank" rel="noopener">EEA, UK, Switzerland version</a><a href="https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance" target="_blank" rel="noopener">How to opt out of training</a><a href="https://privacy.openai.com" target="_blank" rel="noopener">privacy.openai.com</a></div>
+    <ul>
+      <li><b>What is collected:</b> account data, date of birth, payments, all uploaded content (text, files, images, audio, video, connected-service data), <mark class="use">address book contacts if you connect them</mark>, logs, device data, approximate and (optionally) precise GPS location, Atlas browser data.</li>
+      <li><b>Training (section 2):</b> <mark class="use">content you provide may be used to train the models behind ChatGPT</mark>; you can opt out in settings.</li>
+      <li><b>Monitoring:</b> <mark class="use">content submitted on the platform is monitored to prevent fraud and abuse</mark>; a user's age may be estimated.</li>
+      <li><b>Retention (section 4):</b> deleted data is erased within 30 days, <mark class="use">except data already de-identified and disassociated from your account for model training</mark>.</li>
+      <li><b>Disclosure:</b> vendors, affiliates, business account admins (who can see your content), parents of teens with linked accounts, search and shopping partners, authorities.</li>
+      <li><b>"We don't use" statements:</b> <mark class="no">Temporary Chats are not used to improve models</mark>; <mark class="no">OpenAI does not "sell" personal data, "share" it for cross-context behavioural advertising, or process it for targeted advertising</mark>; <mark class="no">does not process sensitive data to infer consumer characteristics</mark>; the policy <mark class="no">does not cover API and business product content</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="gemini">
+    <header><h3>Google — Gemini</h3><span class="meta">Gemini Apps Privacy Notice 29 June 2026, Privacy Hub 24 September 2026</span></header>
+    <div class="links"><a href="https://support.google.com/gemini/answer/13594961" target="_blank" rel="noopener">Gemini Apps Privacy Hub</a><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a><a href="https://myactivity.google.com/product/gemini" target="_blank" rel="noopener">Keep Activity setting</a></div>
+    <ul>
+      <li><b>What is collected:</b> prompts, files, photos, screens, Gemini Live recordings and transcripts, Gem instructions, connected app data (Gmail, Photos, Search and YouTube history), <mark class="use">call and message logs, contacts, installed apps and screen content</mark> in the mobile app, location, remote browser cookies.</li>
+      <li><b>Use:</b> <mark class="use">to provide, improve and develop services, including generative AI models</mark>, to personalise and to measure performance.</li>
+      <li><b>Humans read chats:</b> <mark class="use">a subset of chats is reviewed by trained reviewers, including service-provider staff</mark>; Google explicitly asks you not to enter confidential information. <mark class="use">Reviewed chats are kept up to 3 years and are not deleted when you delete your activity</mark>.</li>
+      <li><b>Retention:</b> activity is auto-deleted after 18 months by default. With Keep Activity off, chats are still kept for 72 hours and <mark class="use">used to protect Google and users, including with human reviewers</mark>. Gemini settings do not control processing of chats to create anonymised data.</li>
+      <li><b>"We don't use" statements:</b> <mark class="no">with Keep Activity off, future chats are not used to train models (unless you send feedback)</mark>; <mark class="no">temporary chats are not used for training</mark>; <mark class="no">Gemini chats are not used to show ads</mark>; <mark class="no">Google does not sell your personal information</mark>; <mark class="no">Gemini Live audio, video and screen shares are not used to improve services by default</mark>; <mark class="no">agentic call recordings and transcripts are not used for training</mark>; <mark class="no">avatar recordings are not used for training except to address abuse</mark>; <mark class="no">source files in Notebooks are not used directly for training</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="deepseek">
+    <header><h3>DeepSeek</h3><span class="meta">Privacy Policy, updated 10 February 2026</span></header>
+    <div class="links"><a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a><a href="https://cdn.deepseek.com/policies/en-US/model-algorithm-disclosure.html" target="_blank" rel="noopener">Model mechanism and training</a><a href="https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html" target="_blank" rel="noopener">Terms of Use</a></div>
+    <ul>
+      <li><b>What is collected:</b> email or phone, password, date of birth, text and voice input, files, photos, chat history, IP, device identifiers; <mark class="use">a device ID and user ID are assigned to track activity across devices</mark>; public internet data for training.</li>
+      <li><b>Training:</b> <mark class="use">data is used to improve and train its technology, including machine learning models, including by monitoring interactions across all your devices</mark>.</li>
+      <li><b>Group companies:</b> <mark class="use">process your data for research, foundation model training and optimisation, analytics and storage</mark>.</li>
+      <li><b>Storage:</b> <mark class="use">data is collected, processed and stored in the People's Republic of China</mark>; kept as long as the account exists.</li>
+      <li><b>Disclosure:</b> <mark class="use">to law enforcement, public authorities and copyright holders</mark> under law, legal process or government requests; search keywords are shared with search API providers.</li>
+      <li><b>Opt-out:</b> the list of rights includes opting out of the use of data for model training; exercised by emailing privacy@deepseek.com.</li>
+      <li><b>"We don't use" statements:</b> <mark class="no">does not extract voiceprints, facial recognition data or other biometrics from voice and photos</mark>; <mark class="no">does not obtain precise geolocation without explicit consent</mark>; <mark class="no">does not engage in targeted advertising, sell personal data or use it for profiling</mark>; the policy <mark class="no">does not cover third-party apps built on the DeepSeek API</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="qwen">
+    <header><h3>Qwen</h3><span class="meta">Privacy Policy, effective 7 September 2026</span></header>
+    <div class="links"><a href="https://qwen.ai/privacypolicy" target="_blank" rel="noopener">Privacy Policy</a><a href="https://chat.qwen.ai/legal-agreement/privacy-policy" target="_blank" rel="noopener">Same policy via chat.qwen.ai</a></div>
+    <ul>
+      <li><b>What is collected:</b> prompts, text, files, images, audio, video, <mark class="use">voice and video recordings when using voice features</mark>, account data (including from Google, Apple, GitHub), feedback (👍/👎 stores the conversation), device data and IP, logs; <mark class="use">data about you from advertising and analytics partners</mark>.</li>
+      <li><b>Training (sections II and IV):</b> <mark class="use">de-identified user content and feedback may be used to train and improve models</mark> on the basis of "legitimate interests". No separate opt-out is described.</li>
+      <li><b>Disclosure:</b> Alibaba Cloud (Singapore) processes requests and stores data; <mark class="use">some automatically collected device data is shared with advertising and analytics partners</mark>; <mark class="use">affiliates receive data for research, analytics and content moderation</mark>.</li>
+      <li><b>Storage:</b> processed and stored in Singapore; kept "as long as necessary".</li>
+      <li><b>"We don't use" statements:</b> <mark class="no">raw inputs are not used to train models directly</mark>; <mark class="no">inputs are not reviewed manually except for security, abuse, debugging and legal compliance</mark>; <mark class="no">Alibaba Cloud deletes your input after generating a response and does not store it separately</mark>; <mark class="no">no decisions based on automated processing with legal effects</mark>.</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="yandex">
+    <header><h3>Yandex — Alice AI</h3><span class="meta">Alice AI Terms of Use of 10 September 2026; app licence agreement of 10 April 2026</span></header>
+    <div class="links"><a href="https://yandex.ru/legal/alice_chat/ru/" target="_blank" rel="noopener">Alice AI Terms of Use</a><a href="https://www.yandex.ru/legal/aliceapp/ru/" target="_blank" rel="noopener">Alice AI app licence</a><a href="https://yandex.ru/legal/confidential" target="_blank" rel="noopener">Yandex Privacy Policy</a><a href="https://id.yandex.ru/personal/data-access" target="_blank" rel="noopener">Opt out of service improvement</a></div>
+    <ul>
+      <li><b>Operator:</b> Platforma II-resheniy LLC (Moscow). The service runs in the Alice AI and "Yandex with Alice" apps, Yandex Browser, Search and at alice.yandex.ru. Russian law applies.</li>
+      <li><b>What is collected (app licence, cl. 5.8):</b> OS type, <mark class="use">SIM card details, location</mark>, app identifier, usage statistics, linked device data, <mark class="use">voice recordings, search queries</mark>. When Alice is called in Yandex Browser, <mark class="use">the content of the open page, including personal data, may be processed</mark> (cl. 2.8). The booking agent uses name, address, phone and email from Yandex ID and your booking history (cl. 2.12.2).</li>
+      <li><b>Service improvement (cl. 6.6):</b> <mark class="use">Yandex may use requests, their parts, uploaded materials and any data obtained by executing requests to improve the services of Yandex and its affiliates</mark>. You can opt out in Yandex ID settings.</li>
+      <li><b>Licence to requests (cl. 4.3):</b> by submitting a request you grant Yandex <mark class="use">a free, irrevocable, worldwide licence to the request and uploaded files, including video and camera images</mark>: to improve algorithms and technologies (anonymously), <mark class="use">to place them in Yandex services for public access, anonymously or linked to your name</mark>, with the right to sublicense to third parties without your consent.</li>
+      <li><b>Service responses (cl. 3.4):</b> <mark class="use">any generated content may be used by Yandex and its affiliates anonymously, for any purpose, worldwide, with no time limit</mark>.</li>
+      <li><b>Statistics (cl. 6.5):</b> data is processed by Yandex and its affiliates for research and statistics, including to provide to third parties; published only in aggregate.</li>
+      <li><b>Voice recordings (app licence):</b> <mark class="use">de-identified recordings may be accessed by Yandex staff and contractors</mark> to analyse and improve the app. Voice data settings are available in your account.</li>
+      <li><b>Storage (cl. 6.2):</b> consent to storage and processing in other jurisdictions, including Russia, lasts for the period of use and 10 years after. Data is destroyed once the purposes are achieved.</li>
+      <li><b>General Privacy Policy (26.08.2025):</b> applies to Yandex LLC and group companies. <mark class="use">It collects search history, purchases, places visited, likes, email correspondents' addresses, phone book data, files stored with Yandex, location, Wi-Fi and payment card data; data from different services is linked to your account</mark> (s. 4). Yandex also receives data from partners such as advertisers and taxi services.</li>
+      <li><b>Purposes (s. 5):</b> <mark class="use">personalising ads and offers by search history and other data, improving other Yandex products, creating new products, big data and research, checking trustworthiness</mark>.</li>
+      <li><b>Disclosure (s. 7):</b> <mark class="use">to Yandex group companies; ad networks, advertisers, site and app owners; taxi services; payment systems; authorities, law enforcement and courts on mandatory request</mark>. Russian citizens' data is stored in databases in Russia (s. 7.3).</li>
+      <li><b>Controls:</b> delete data in Yandex ID "Data management"; turn off ad personalisation at yandex.ru/tune/adv.</li>
+      <li><b>"We don't use" statements:</b> <mark class="no">Yandex does not intentionally collect sensitive data (race, political views, health, biometrics)</mark>, though it processes such data if you enter it yourself, for example in a health query; <mark class="no">does not collect data to build a user "profile" to an extent that significantly affects rights and freedoms</mark>; <mark class="no">data is mostly processed automatically without staff access</mark>. <mark class="no">For voice dictation of emails and calendar entries, recordings are not transferred or used</mark>; <mark class="no">statistical results are published only in a form that does not identify users</mark>. Yandex also states it has no technical means or obligation to moderate or view posted information (cl. 5.4).</li>
+    </ul>
+  </article>
+
+  <article class="dossier" id="sber">
+    <header><h3>Sber — GigaChat</h3><span class="meta">GigaChat Service User Agreement, updated 22 June 2026</span></header>
+    <div class="links"><a href="https://developers.sber.ru/docs/ru/policies/gigachat/agreement" target="_blank" rel="noopener">GigaChat User Agreement</a><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/individuals" target="_blank" rel="noopener">GigaChat API offer for individuals</a><a href="https://www.sberbank.ru/privacy/policy#pdn" target="_blank" rel="noopener">Sberbank Personal Data Policy</a></div>
+    <ul>
+      <li><b>Operator:</b> Sberbank PJSC. The service is available via the Bank's portal and API; users must be adult, legally capable Russian residents. Personal data is processed under Sberbank's Personal Data Policy (cl. 7.1).</li>
+      <li><b>Training:</b> the agreement <mark class="use">says neither that requests are used for training nor that they are not</mark>. Users may not use what they obtain from the service to develop competing models (cl. 4.5.7).</li>
+      <li><b>Licence to your requests (cl. 5.3):</b> <mark class="use">by posting content in the service or sending it via the API, you grant the Bank a non-exclusive, free licence for the full term of the right, worldwide and by any means</mark>; for databases, including extraction of materials.</li>
+      <li><b>Licence to outputs (cl. 5.2):</b> <mark class="use">an irrevocable, free licence to generated content: storage on the servers of the Bank and its affiliates, sublicensing to third parties, public display for promotion and advertising, modification, use in the Bank's advertising and marketing materials</mark>.</li>
+      <li><b>Personal data in requests (cl. 7.1–7.6):</b> the service is not intended for requests containing personal data; users undertake not to send it, and if they do, they are responsible for the lawfulness of processing and must compensate the Bank's losses.</li>
+      <li><b>Disclosure:</b> <mark class="use">partners Zvuk LLC and RIKh LLC receive a digital identifier, generated and user content and technical details</mark> when you launch their service (cl. 7.9).</li>
+      <li><b>Storage:</b> on servers designated by the Bank; location and term not stated.</li>
+      <li><b>developers.sber.ru portal privacy policy (10.02.2025):</b> operator Sberbank PJSC; the GigaChat API is accessed through this portal. Collects identification data (including via Sber ID), account data, <mark class="use">data from third parties, including Sber group companies</mark>, and cookies (s. 2). Purposes: running and improving the portal, <mark class="use">promotional mailings</mark> (cl. 3.1). Disclosure: to other portal participants, third parties under contracts or with your consent, <mark class="use">and authorities under law, including inquiry and investigation bodies</mark> (s. 6). Term: destroyed within 30 days after the purpose is achieved (cl. 7.1). Data requests to pdn-org@sberbank.ru, answered within 30 days (cl. 9.1). The policy says nothing about AI training, sale of data or storage location.</li>
+      <li><b>Sberbank Personal Data Processing Policy</b> (approved by Management Board resolution No. 18§12a of 10.09.2025; <a href="https://www.sberbank.ru/privacy/policy#pdn" target="_blank" rel="noopener">sberbank.ru/privacy/policy</a>). Referenced by the GigaChat agreement (cl. 7.1). This is the bank's general document: AI, GigaChat and chatbot requests are not mentioned separately. Of its 16 processing purposes, these matter for customers:
+        <ul>
+          <li><b>Purpose 5, personalised offers:</b> <mark class="use">identifying interests, including those detected by the Bank's automated systems; building a single customer profile; assessing contract terms for a personal offer</mark>; also covers partners' customers and website and app users.</li>
+          <li><b>Purpose 6, information and advertising:</b> <mark class="use">advertising by calls, SMS, push and email, including about partners' and third parties' projects</mark>.</li>
+          <li><b>Purpose 7, product development:</b> <mark class="use">analytics, improving existing products and developing new ones using data on website and app activity, transactions, income, spending, interests, family and children, social media profile, receipts and enquiries</mark>.</li>
+        </ul>
+      </li>
+      <li><b>Disclosure (cl. 9.2):</b> <mark class="use">the Bank may transfer data to third parties and partners, authorities, extra-budgetary funds, the Bank of Russia and courts, and engage them to process it</mark> where there is a legal basis. A separate purpose 16 covers dealings with foreign authorities.</li>
+      <li><b>Storage and retention:</b> Russian citizens' data is stored in databases in Russia, except as provided by law (cl. 9.1); kept no longer than the purposes require (cl. 4.3). Destroyed when the purpose is achieved, consent is withdrawn or processing must stop (cl. 4.4); specific terms are set in the Bank's internal documents.</li>
+      <li><b>Rights (cl. 9.3):</b> obtain information about processing, demand correction, blocking or destruction of data, stop processing, withdraw consent. The Bank may still process data without consent where the law allows (cl. 9.2).</li>
+      <li><b>"We don't use" statements (general policy):</b> <mark class="no">not combining databases processed for incompatible purposes; processing only data relevant to the purposes; keeping data no longer than the purposes require</mark> (principles, cl. 2.1). There is no statement that data is not sold.</li>
+      <li><b>"We don't use" statements (GigaChat):</b> the user agreement contains none. The separate offer for the paid GigaChat API for individuals (SaluteDevices LLC, 06.02.2026) states that <mark class="no">customer content is not used for own purposes unrelated to providing the service</mark> and that <mark class="no">generated content may be used in marketing only with the customer's prior consent</mark> (cl. 6.2–6.3).</li>
+    </ul>
+  </article>
+</section>
+
+<section class="prose">
+  <h2>Sources</h2>
+  <ul class="src">
+    <li><b>Anthropic</b><a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">anthropic.com/legal/privacy</a></li>
+    <li><b>OpenAI</b><a href="https://openai.com/policies/row-privacy-policy/" target="_blank" rel="noopener">openai.com/policies/row-privacy-policy</a></li>
+    <li><b>Google Gemini</b><a href="https://support.google.com/gemini/answer/13594961" target="_blank" rel="noopener">support.google.com/gemini/answer/13594961</a></li>
+    <li><b>DeepSeek</b><a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html" target="_blank" rel="noopener">cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html</a></li>
+    <li><b>Qwen</b><a href="https://qwen.ai/privacypolicy" target="_blank" rel="noopener">qwen.ai/privacypolicy</a></li>
+    <li><b>Yandex</b><a href="https://yandex.ru/legal/alice_chat/ru/" target="_blank" rel="noopener">yandex.ru/legal/alice_chat</a><a href="https://www.yandex.ru/legal/aliceapp/ru/" target="_blank" rel="noopener">yandex.ru/legal/aliceapp</a><a href="https://yandex.ru/legal/confidential/" target="_blank" rel="noopener">yandex.ru/legal/confidential</a></li>
+    <li><b>Sber</b><a href="https://developers.sber.ru/docs/ru/policies/gigachat/agreement" target="_blank" rel="noopener">developers.sber.ru/…/gigachat/agreement</a><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/individuals" target="_blank" rel="noopener">developers.sber.ru/…/gigachat-agreement/individuals</a><a href="https://developers.sber.ru/docs/ru/policies/privacy-policy" target="_blank" rel="noopener">developers.sber.ru/…/privacy-policy</a><a href="https://www.sberbank.ru/privacy/policy#pdn" target="_blank" rel="noopener">sberbank.ru/privacy/policy</a></li>
+  </ul>
+  <h3>API documents</h3>
+  <ul class="src">
+    <li><b>Anthropic</b><a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">anthropic.com/legal/commercial-terms</a></li>
+    <li><b>OpenAI</b><a href="https://openai.com/enterprise-privacy/" target="_blank" rel="noopener">openai.com/enterprise-privacy</a></li>
+    <li><b>Google Gemini</b><a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">ai.google.dev/gemini-api/terms</a></li>
+    <li><b>DeepSeek</b><a href="https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html" target="_blank" rel="noopener">DeepSeek Open Platform Terms</a></li>
+    <li><b>Qwen</b><a href="https://www.alibabacloud.com/help/en/model-studio/privacy-notice" target="_blank" rel="noopener">alibabacloud.com/help/en/model-studio/privacy-notice</a></li>
+    <li><b>Yandex</b><a href="https://aistudio.yandex.ru/docs/ru/ai-studio/operations/disable-logging.html" target="_blank" rel="noopener">aistudio.yandex.ru — disabling logging</a></li>
+    <li><b>Sber</b><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/corporate-clients-prepaid" target="_blank" rel="noopener">GigaChat API offer for businesses</a><a href="https://developers.sber.ru/docs/ru/policies/gigachat-agreement/individuals" target="_blank" rel="noopener">for individuals</a></li>
+  </ul>
+  <p class="meta">Policies change. Check the current version at the link before making an important decision.</p>
+</section>
+
+</div>
+
+</body></html>
